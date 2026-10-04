@@ -6,26 +6,32 @@ import (
 	"github.com/golangci/plugin-module-register/register"
 	"golang.org/x/tools/go/analysis"
 
-	"github.com/yago-123/kube-operator-lint/analyzers"
+	clientinreconcile "github.com/yago-123/kube-operator-lint/analyzers/kol01"
 )
 
 func init() {
-	// golangci-lint imports this package to register the plugin.
-	register.Plugin("kube-operator-lint", newPlugin)
+	// Register each rule separately so projects can enable and suppress KOLs
+	// using golangci-lint's normal per-linter controls.
+	register.Plugin("kol01", pluginFor(clientinreconcile.Analyzer))
 }
 
-func newPlugin(_ any) (register.LinterPlugin, error) {
-	// todo: we don't have configurable rules yet, so there's nothing to read from settings.
-	return &Plugin{}, nil
+// pluginFor keeps future registrations small: each KOL gets its own name and
+// analyzer while sharing the thin golangci-lint adapter.
+func pluginFor(analyzer *analysis.Analyzer) register.NewPlugin {
+	return func(_ any) (register.LinterPlugin, error) {
+		return &Plugin{analyzers: []*analysis.Analyzer{analyzer}}, nil
+	}
 }
 
-// Plugin connects golangci-lint to the analyzer list. The rule logic stays in
-// the analyzer packages so it can also run without golangci-lint.
-type Plugin struct{}
+// Plugin exposes one KOL rule through golangci-lint. The rule logic stays in
+// its analyzer package so the standalone command can still run every rule.
+type Plugin struct {
+	analyzers []*analysis.Analyzer
+}
 
-// BuildAnalyzers returns the same rules used by the standalone command.
-func (*Plugin) BuildAnalyzers() ([]*analysis.Analyzer, error) {
-	return analyzers.All(), nil
+// BuildAnalyzers returns the analyzer assigned to this golangci-lint entry.
+func (p *Plugin) BuildAnalyzers() ([]*analysis.Analyzer, error) {
+	return p.analyzers, nil
 }
 
 // GetLoadMode tells golangci-lint which package data the rules need.
