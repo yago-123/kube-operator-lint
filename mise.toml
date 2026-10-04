@@ -1,5 +1,6 @@
 [tools]
 go = "1.26.4"
+golangci-lint = "2.14.0"
 
 [tasks.build]
 description = "Build all Go packages"
@@ -8,3 +9,7 @@ run = "go build ./..."
 [tasks.test]
 description = "Run Go tests"
 run = "go test ./..."
+
+[tasks.lint]
+description = "Lint the project implementation"
+run = "golangci-lint run ./..."

@@ -4,9 +4,8 @@ import (
 	"os/exec"
 	"testing"
 
+	clientinreconcile "github.com/yago-123/kube-operator-lint/analyzers/kol01"
 	"golang.org/x/tools/go/analysis/analysistest"
-
-	"github.com/yago-123/kube-operator-lint/analyzers/kol01"
 )
 
 func TestKOL01ClientInReconcile(t *testing.T) {
