@@ -1,12 +1,5 @@
 /.cache/
 
 # Default ignored IDE files
-/.idea/shelf/
-/.idea/workspace.xml
-# Editor-based HTTP Client requests
-/.idea/httpRequests/
-# Ignored default folder with query files
-/.idea/queries/
-# Datasource local storage ignored files
-/.idea/dataSources/
-/.idea/dataSources.local.xml
+/.idea
+
