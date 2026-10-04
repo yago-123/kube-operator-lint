@@ -1,3 +1,3 @@
 # kube-operator-lint
 
-* [KOL01: Client reconcile](analyzers/kol01/doc.go)
+* [KOL01: Client reconcile](https://pkg.go.dev/github.com/yago-123/kube-operator-lint/analyzers/kol01)
